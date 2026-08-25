@@ -20,7 +20,7 @@
 
 ## Overview
 
-**AWS CostLens**는 AWS 비용을 검토하기 위한 가볍고 읽기 전용 CLI입니다.환경을 변경하지 않고 자원 정보를 제공합니다.
+**AWS CostLens**는 AWS 비용을 검토하기 위한 가볍고 읽기 전용 CLI입니다. 기존 사용자 환경을 최대한 변경하지 않고 자원 정보를 제공합니다.
 
 간단한 터미널 기반 뷰를 제공합니다.:
 
@@ -44,3 +44,5 @@
 ```bash
 brew tap aws-all-star/tap
 brew install aws-costlens
+```
+
