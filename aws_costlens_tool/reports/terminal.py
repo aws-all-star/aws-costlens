@@ -6,7 +6,7 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
-from aws_costlens.models.finding import Finding
+from aws_costlens_tool.models.finding import Finding
 
 console = Console()
 

@@ -4,27 +4,22 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "aws-costlens-tool"
-version = "0.1.0"
-description = "A lightweight, read-only AWS FinOps CLI for cost analysis, waste detection, credit monitoring, and optimization recommendations."
+version = "0.1.1"
+description = "Read-only AWS FinOps CLI for cost, credit, and waste checks"
 readme = "README.md"
 requires-python = ">=3.10"
+
 dependencies = [
     "boto3>=1.35.0",
     "rich>=13.7.0",
     "typer>=0.12.0"
 ]
 
-[project.optional-dependencies]
-dev = [
-  "pytest>=8.0.0",
-  "ruff>=0.6.0"
-]
-
 [project.scripts]
 aws-costlens = "aws_costlens_tool.cli:app"
 
 [tool.setuptools.packages.find]
-include = ["aws_costlens*"]
+include = ["aws_costlens_tool*"]
 
 [tool.ruff]
 line-length = 100

@@ -43,7 +43,14 @@ def get_credits(session: boto3.Session, account_id: str) -> dict:
     return {"available": True, "credits": credits}
 
 
-def _format_epoch(value: int | None) -> str | None:
+def _format_epoch(value: int | float | datetime | None) -> str | None:
     if value is None:
         return None
-    return datetime.fromtimestamp(value, tz=timezone.utc).date().isoformat()
+
+    if isinstance(value, datetime):
+        return value.date().isoformat()
+
+    return datetime.fromtimestamp(
+        value,
+        tz=timezone.utc,
+    ).date().isoformat()

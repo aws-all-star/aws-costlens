@@ -3,14 +3,14 @@ from __future__ import annotations
 import typer
 from botocore.exceptions import BotoCoreError, ClientError, ProfileNotFound
 
-from aws_costlens.aws.billing import get_credits
-from aws_costlens.aws.cost_explorer import get_cost_summary
-from aws_costlens.aws.session import get_identity, get_session
-from aws_costlens.checks.ebs import check_unattached_ebs
-from aws_costlens.checks.eip import check_unassociated_eips
-from aws_costlens.checks.stopped_ec2 import check_stopped_instances
-from aws_costlens.config import DEFAULT_REGION
-from aws_costlens.reports.terminal import (
+from aws_costlens_tool.aws.billing import get_credits
+from aws_costlens_tool.aws.cost_explorer import get_cost_summary
+from aws_costlens_tool.aws.session import get_identity, get_session
+from aws_costlens_tool.checks.ebs import check_unattached_ebs
+from aws_costlens_tool.checks.eip import check_unassociated_eips
+from aws_costlens_tool.checks.stopped_ec2 import check_stopped_instances
+from aws_costlens_tool.config import DEFAULT_REGION
+from aws_costlens_tool.reports.terminal import (
     console,
     show_cost_summary,
     show_credits,
@@ -89,8 +89,13 @@ def credit(
     session = _session(profile, region)
     identity = get_identity(session)
     show_header(identity["account"], region, identity["arn"])
-    show_credits(get_credits(session, identity["account"]))
-
+    
+    try:
+        show_credits(get_credits(session, identity["account"]))
+    except (ClientError, BotoCoreError, TypeError, ValueError) as exc:
+        console.print(
+            f"[yellow]Credit check skipped:[/yellow] {exc}"
+    )
 
 @app.command()
 def waste(
