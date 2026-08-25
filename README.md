@@ -32,8 +32,8 @@
 | 🏷️ **Tags** | 선택된 EC2, RDS 및 S3 리소스에 대한 태깅 상태 |
 
 > [!NOTE]
-> AWS CostLens is designed for **visibility and review**.  
-> It does not modify, stop, delete, resize, or tag AWS resources.
+> AWS CostLens는 **가시성 및 빠른 검토**를 위해 가볍게 설계되었습니다. 
+> AWS 리소스를 수정하거나 중지하거나 삭제하거나 크기를 조정하거나 태그를 지정하지 않습니다.
 
 ---
 
