@@ -78,6 +78,7 @@ aws-costlens waste
 # 전체 AWS CostLens 점검을 실행하십시오.
 aws-costlens check
 ```
+------
 
 ## 설치하기
 #### Homebrew를 사용하십시오 (macOS):
@@ -107,6 +108,7 @@ brew install aws-costlens
   - `s3:GetBucketLocation`
   - `s3:GetBucketTagging`
 
+------
 
 ### 명령줄 옵션
 `aws-costlens`와 그 뒤에 옵션을 사용하여 스크립트를 실행하십시오:
