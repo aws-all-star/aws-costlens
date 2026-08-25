@@ -57,7 +57,7 @@ AWS CostLens는 이런 작은 불편에서 시작했습니다. 여러 AWS Consol
 ---
 
 ## 시작하기
-Get up and running in under a minute:
+1분 이내에 바로 시작해보기:
 ```bash
 # Trusted formula
 brew trust --formula aws-all-star/tap/aws-costlens
@@ -86,5 +86,46 @@ brew tap aws-all-star/tap
 brew install aws-costlens
 ```
 
+<br>
+
+## ⚡ Prerequisites
+
+> [!IMPORTANT]
+> AWS CostLens requires AWS credentials with the following **read-only permissions**.
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "sts:GetCallerIdentity",
+
+        "ce:GetCostAndUsage",
+        "ce:GetCostForecast",
+        "ce:GetDimensionValues",
+        "ce:GetTags",
+
+        "billing:GetCredits",
+
+        "ec2:DescribeAddresses",
+        "ec2:DescribeInstances",
+        "ec2:DescribeVolumes",
+        "ec2:DescribeSnapshots",
+        "ec2:DescribeRegions",
+        "ec2:DescribeNetworkInterfaces",
+
+        "rds:DescribeDBInstances",
+        "rds:ListTagsForResource",
+
+        "s3:ListAllMyBuckets",
+        "s3:GetBucketLocation",
+        "s3:GetBucketTagging"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
 
 
