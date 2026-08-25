@@ -21,17 +21,17 @@ AWS 비용과 주요 비용 발생 서비스를 분석하고, 유휴·미사용 
 
 ## Overview
 
-**AWS CostLens** is a lightweight, read-only CLI for reviewing AWS cost and
-resource information without making changes to your environment.
+**AWS CostLens**는 AWS 비용을 검토하기 위한 가볍고 읽기 전용 CLI입니다.
+환경을 변경하지 않고 자원 정보를 제공합니다.
 
-It provides a simple terminal-based view of:
+간단한 터미널 기반 뷰를 제공합니다.:
 
 | Area | What it shows |
 |---|---|
-| 💰 **Cost** | Current month cost, previous month cost, change rate, and top service drivers |
-| 💳 **Credit** | Available AWS promotional credits, estimated remaining amounts, and expiration dates |
-| 🩺 **Waste** | Potentially unused or unnecessary AWS resources |
-| 🏷️ **Tags** | Tagging status for selected EC2, RDS, and S3 resources |
+| 💰 **Cost** | 현재 월 비용, 전월 비용, 변동 비율 및 주요 서비스 요인 |
+| 💳 **Credit** | 사용 가능한 AWS 프로모션 크레딧, 예상 남은 금액 및 만료 날짜 |
+| 🩺 **Waste** | 잠재적으로 사용되지 않거나 불필요한 AWS 리소스 |
+| 🏷️ **Tags** | 선택된 EC2, RDS 및 S3 리소스에 대한 태깅 상태 |
 
 > [!NOTE]
 > AWS CostLens is designed for **visibility and review**.  
