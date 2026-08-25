@@ -132,3 +132,139 @@ def _optional_money(value: object) -> str:
         return f"${Decimal(str(value)):.2f}"
     except Exception:
         return str(value)
+
+
+def show_resource_tags(records: list[dict], errors: list[str] | None = None) -> None:
+    """Display tagging status for cost-relevant AWS resources."""
+
+    table = Table(title="🏷️ Resource Tagging")
+
+    table.add_column("Service")
+    table.add_column("Resource")
+    table.add_column("Status")
+    table.add_column("Tags")
+
+    tagged = 0
+    untagged = 0
+
+    for item in records:
+        status = item.get("status", "UNTAGGED")
+
+        if status == "TAGGED":
+            tagged += 1
+            status_text = "[green]TAGGED[/green]"
+        else:
+            untagged += 1
+            status_text = "[yellow]UNTAGGED[/yellow]"
+
+        tags = item.get("tags", {})
+
+        if tags:
+            tag_items = list(tags.items())
+
+            visible = [
+                f"{key}={value}"
+                for key, value in tag_items[:3]
+            ]
+
+            remaining = len(tag_items) - 3
+
+            if remaining > 0:
+                visible.append(f"+{remaining} more")
+
+            tag_text = ", ".join(visible)
+        else:
+            tag_text = "-"
+
+        table.add_row(
+            str(item.get("service", "")),
+            str(item.get("resource", "")),
+            status_text,
+            tag_text,
+        )
+
+    if records:
+        console.print(table)
+
+        console.print(
+            f"[green]Tagged[/green]   : {tagged}\n"
+            f"[yellow]Untagged[/yellow] : {untagged}\n"
+            f"Total    : {len(records)}"
+        )
+    else:
+        console.print(
+            Panel(
+                "No supported resources were returned.",
+                title="🏷️ Resource Tagging",
+            )
+        )
+
+    if errors:
+        console.print(
+            f"[dim]Tag checks skipped for {len(errors)} service(s) "
+            f"because of permissions or API errors.[/dim]"
+        )
+
+
+def show_resource_tags(records, errors=None):
+    """Display EC2, RDS, and S3 resource tagging status."""
+
+    table = Table(title="🏷️ Resource Tagging")
+
+    table.add_column("Service", style="cyan")
+    table.add_column("Resource")
+    table.add_column("Status")
+    table.add_column("Tags")
+
+    tagged = 0
+    untagged = 0
+
+    for item in records:
+        status = item["status"]
+        tags = item.get("tags", {})
+
+        if status == "TAGGED":
+            tagged += 1
+            status_text = "[green]TAGGED[/green]"
+        else:
+            untagged += 1
+            status_text = "[yellow]UNTAGGED[/yellow]"
+
+        if tags:
+            tag_items = list(tags.items())
+
+            # 최대 3개까지만 표시
+            visible = [
+                f"{key}={value}"
+                for key, value in tag_items[:3]
+            ]
+
+            remaining = len(tag_items) - 3
+
+            if remaining > 0:
+                visible.append(f"+{remaining} more")
+
+            tag_text = ", ".join(visible)
+        else:
+            tag_text = "-"
+
+        table.add_row(
+            item["service"],
+            item["resource"],
+            status_text,
+            tag_text,
+        )
+
+    console.print(table)
+
+    console.print(
+        f"[green]Tagged[/green]   : {tagged}    "
+        f"[yellow]Untagged[/yellow] : {untagged}    "
+        f"Total : {len(records)}"
+    )
+
+    if errors:
+        console.print(
+            f"[dim]Skipped {len(errors)} service(s) due to "
+            f"permissions or API errors.[/dim]"
+        )

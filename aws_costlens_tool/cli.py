@@ -9,6 +9,7 @@ from aws_costlens_tool.aws.session import get_identity, get_session
 from aws_costlens_tool.checks.ebs import check_unattached_ebs
 from aws_costlens_tool.checks.eip import check_unassociated_eips
 from aws_costlens_tool.checks.stopped_ec2 import check_stopped_instances
+from aws_costlens_tool.checks.tags import scan_resource_tags
 from aws_costlens_tool.config import DEFAULT_REGION
 from aws_costlens_tool.reports.terminal import (
     console,
@@ -17,6 +18,7 @@ from aws_costlens_tool.reports.terminal import (
     show_findings,
     show_header,
     show_recommendations,
+    show_resource_tags,
 )
 
 app = typer.Typer(help="Read-only AWS FinOps cost and waste checkup CLI")
@@ -60,7 +62,10 @@ def check(
             except (ClientError, BotoCoreError) as exc:
                 console.print(f"[yellow]{runner.__name__} skipped:[/yellow] {exc}")
 
+        tag_records, tag_errors = scan_resource_tags(session, region)
+
         show_findings(findings)
+        show_resource_tags(tag_records, tag_errors)
         show_recommendations(findings)
 
     except (ClientError, BotoCoreError) as exc:
@@ -112,7 +117,10 @@ def waste(
     findings.extend(check_unattached_ebs(session, region))
     findings.extend(check_stopped_instances(session, region))
 
+    tag_records, tag_errors = scan_resource_tags(session, region)
+
     show_findings(findings)
+    show_resource_tags(tag_records, tag_errors)
     show_recommendations(findings)
 
 
