@@ -80,12 +80,13 @@ aws-costlens check
 ```
 
 ## 설치하기
-### use Homebrew (macOS):
+#### Homebrew를 사용하십시오 (macOS):
 ```bash
 brew tap aws-all-star/tap
 brew install aws-costlens
 ```
 <br>
+
 ## ⚡ 전제 조건
 
 > [!IMPORTANT]
