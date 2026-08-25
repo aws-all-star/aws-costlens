@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import boto3
 
-from aws_finops_tool.aws.ec2 import list_volumes
-from aws_finops_tool.models.finding import Finding
+from aws_costlens.aws.ec2 import list_volumes
+from aws_costlens.models.finding import Finding
 
 
 def check_unattached_ebs(session: boto3.Session, region: str) -> list[Finding]:

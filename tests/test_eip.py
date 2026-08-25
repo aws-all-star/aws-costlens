@@ -1,9 +1,9 @@
 from unittest.mock import patch
 
-from aws_finops_tool.checks.eip import check_unassociated_eips
+from aws_costlens.checks.eip import check_unassociated_eips
 
 
-@patch("aws_finops_tool.checks.eip.list_addresses")
+@patch("aws_costlens.checks.eip.list_addresses")
 def test_unassociated_eip_is_reported(mock_list_addresses) -> None:
     mock_list_addresses.return_value = [
         {

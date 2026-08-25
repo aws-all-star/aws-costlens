@@ -1,4 +1,4 @@
-from aws_finops_tool.models.finding import Finding
+from aws_costlens.models.finding import Finding
 
 
 def test_finding_model() -> None:
