@@ -1,2 +1,2 @@
 # aws-finops-dashboard
-A lightweight, read-only AWS FinOps CLI for analyzing cloud costs, detecting idle and unused resources, monitoring credits, and identifying optimization opportunities. Provides cost insights, waste detection, estimated savings, and actionable recommendations across AWS environments.
+클라우드 비용을 분석하고, 유휴 및 사용되지 않은 리소스를 감지하며, 사용 가능한 크레딧(Credit)을 모니터링하고, 최적화 기회를 식별하기 위한 가볍고 읽기 전용인 AWS FinOps CLI입니다. AWS 환경 전반에 걸쳐 비용 인사이트, 폐기물 감지, 예상 절감액 및 실행 가능한 권고사항을 제공합니다.
