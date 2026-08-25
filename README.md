@@ -42,6 +42,15 @@
 또한 테스트가 반복될수록 사용이 끝난 리소스가 남아 있거나 태그가 누락되는 경우가 생겼고, 이것들을 비용과 함께 한 번에 확인할 수 있으면 좋겠다는 생각이 들었습니다.
 AWS CostLens는 이런 작은 불편에서 시작했습니다. 여러 AWS Console 화면을 오가는 대신 **비용 · 크레딧 · 미사용 리소스 · 태깅 상태를 터미널에서 가볍게 확인하는 것**, 그것이 이 도구를 만든 가장 큰 이유입니다.
 
+주요 기능은 다음과 같습니다:
+*   **💰 AWS 비용 현황 한눈에 보기:** 이번 달 누적 비용과 이전 달 비용을 비교하고, 증감률과 서비스별 비용을 함께 확인합니다.
+<img width="1746" height="1484" alt="image" src="https://github.com/user-attachments/assets/4d378fc2-418b-44f7-bc14-5cdb7e28868b" />
+
+*   **💳 Promotional Credit 잔액 및 만료일 확인:** AWS Promotional Credit의 최초 금액, 현재 잔액, 예상 잔액과 만료일을 한눈에 확인합니다.
+
+*   **🩺 미사용 리소스 및 태깅 상태 점검:** 태그 적용 여부도 함께 확인하여 태그가 누락된 리소스와 현재 적용된 태그를 쉽게 구분할 수 있습니다.
+
+
 <br>
 
 ---
@@ -75,4 +84,6 @@ aws-costlens check
 brew tap aws-all-star/tap
 brew install aws-costlens
 ```
+
+
 
