@@ -1,16 +1,51 @@
-# AWS CostLens (AWS Cost Visibility & Optimization)
-AWS 클라우드 비용을 분석하고, 유휴 및 미사용 리소스를 탐지하며, **사용 가능한 크레딧을 지속적으로 모니터링**하고, 비용 최적화 기회를 식별하기 위한 가볍고 읽기 전용으로 제작된 AWS FinOps CLI 도구입니다.
-AWS 환경 전반에 걸쳐 **비용 인사이트, 낭비 리소스 탐지, 예상 절감액 산정, 실행 가능한 최적화 권고를 제공**합니다.
+<div align="center">
 
-## 이 프로젝트를 만든 이유(Why This Project?)
-많은 AWS 비용 관리 도구는 비용을 차트로 시각화하는 데 중점을 둡니다. 특히, 잔여 AWS 크레딧과 소진 추이를 지속적으로 모니터링하고 AWS Budgets와 연계하여, 크레딧 소진 및 예상치 못한 비용 증가를 사전에 감지하고 대응할 수 있도록 지원합니다. 이 프로젝트는 단순한 비용 시각화를 넘어 다음과 같은 운영 관점의 흐름을 중심으로 설계되었습니다.
+# 🔎 AWS CostLens
 
-탐색(Discover) → 진단(Diagnose) → 비용 산정(Estimate) → 최적화 권고(Recommend)
+### Lightweight, read-only AWS cost & resource visibility CLI
 
-비용 가시성과 실제 AWS 리소스 단위의 점검을 결합하여 엔지니어가 다음과 같은 질문에 빠르게 답을 찾을 수 있도록 합니다.
+Analyze AWS costs, monitor promotional credits, identify potential waste,  
+and review resource tagging — directly from your terminal.
 
-* AWS 비용에서 무엇이 달라졌는가?
-* 어떤 AWS 서비스가 비용 증가의 주요 원인인가?
-* 사용되지 않거나 불필요한 비용을 발생시키는 리소스는 무엇인가?
-* AWS 프로모션 크레딧은 얼마나 남아 있는가?
-* 비용 최적화를 위해 무엇을 우선적으로 점검해야 하는가?
+<br>
+
+[![Release](https://img.shields.io/github/v/release/aws-all-star/aws-costlens?style=flat-square)](https://github.com/aws-all-star/aws-costlens/releases)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
+[![AWS](https://img.shields.io/badge/AWS-FinOps-FF9900?style=flat-square&logo=amazonwebservices&logoColor=white)](https://aws.amazon.com/)
+[![License](https://img.shields.io/github/license/aws-all-star/aws-costlens?style=flat-square)](LICENSE)
+
+<br>
+
+**Cost Visibility** · **Credit Monitoring** · **Waste Detection** · **Resource Tagging**
+
+</div>
+
+---
+
+## Overview
+
+**AWS CostLens** is a lightweight, read-only CLI for reviewing AWS cost and
+resource information without making changes to your environment.
+
+It provides a simple terminal-based view of:
+
+| Area | What it shows |
+|---|---|
+| 💰 **Cost** | Current month cost, previous month cost, change rate, and top service drivers |
+| 💳 **Credit** | Available AWS promotional credits, estimated remaining amounts, and expiration dates |
+| 🩺 **Waste** | Potentially unused or unnecessary AWS resources |
+| 🏷️ **Tags** | Tagging status for selected EC2, RDS, and S3 resources |
+
+> [!NOTE]
+> AWS CostLens is designed for **visibility and review**.  
+> It does not modify, stop, delete, resize, or tag AWS resources.
+
+---
+
+## Quick Start
+
+### Homebrew
+
+```bash
+brew tap aws-all-star/tap
+brew install aws-costlens
