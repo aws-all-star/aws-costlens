@@ -69,8 +69,8 @@ aws-costlens waste
 aws-costlens check
 ```
 
-### Homebrew
-
+## 설치하기
+### use Homebrew (macOS):
 ```bash
 brew tap aws-all-star/tap
 brew install aws-costlens
