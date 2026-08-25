@@ -45,9 +45,29 @@ AWS CostLens는 이런 작은 불편에서 시작했습니다. 여러 AWS Consol
 <br>
 
 ---
-## Why AWS FinOps 
 
-## Quick Start
+## 시작하기
+Get up and running in under a minute:
+```bash
+# Trusted formula
+brew trust --formula aws-all-star/tap/aws-costlens
+
+# Install
+brew tap aws-all-star/tap
+brew install aws-costlens
+
+# Check this month's AWS costs and compare with last month
+aws-costlens cost
+
+# Check AWS promotional credit balance and expiration
+aws-costlens credit
+
+# Check unused resources and resource tagging status
+aws-costlens waste
+
+# Run a complete AWS CostLens checkup
+aws-costlens check
+```
 
 ### Homebrew
 
