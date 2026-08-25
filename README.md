@@ -43,13 +43,13 @@ AWS CostLens는 이런 작은 불편에서 시작했습니다. 여러 AWS Consol
 
 주요 기능은 다음과 같습니다:
 *   **💰 AWS 비용 현황 한눈에 보기:** 이번 달 누적 비용과 이전 달 비용을 간단하게 비교하고, 증감률과 서비스별 비용을 함께 확인합니다.
-
+<img width="1600" height="1213" alt="image" src="https://github.com/user-attachments/assets/0283f644-abbf-4858-8d9c-12a12b1b06de" />
 
 *   **💳 Promotional Credit 잔액 및 만료일 확인:** AWS Promotional Credit의 최초 금액, 현재 잔액, 예상 잔액과 만료일을 한눈에 확인합니다.
-
+<img width="1600" height="299" alt="image" src="https://github.com/user-attachments/assets/3bfbaac1-a89a-43cc-9da6-d5eec30ecd49" />
 
 *   **🩺 미사용 리소스 및 태깅 상태 점검:** 태그 적용 여부도 함께 확인하여 태그가 누락된 리소스와 현재 적용된 태그를 쉽게 구분할 수 있습니다.
-
+<img width="1600" height="573" alt="image" src="https://github.com/user-attachments/assets/397f0e2b-9809-4532-b635-0cddbd004fd7" />
 
 <br>
 
