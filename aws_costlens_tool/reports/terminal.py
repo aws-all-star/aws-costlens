@@ -11,6 +11,41 @@ from aws_costlens_tool.models.finding import Finding
 console = Console()
 
 
+def _display_width() -> int:
+    """Return a balanced display width for CostLens output."""
+    return min(max(80, console.size.width - 4), 110)
+
+
+
+def show_logo() -> None:
+    """Display the AWS CostLens banner."""
+
+    large_logo = r"""
+ █████╗ ██╗    ██╗███████╗     ██████╗ ██████╗ ███████╗████████╗██╗     ███████╗███╗   ██╗███████╗
+██╔══██╗██║    ██║██╔════╝    ██╔════╝██╔═══██╗██╔════╝╚══██╔══╝██║     ██╔════╝████╗  ██║██╔════╝
+███████║██║ █╗ ██║███████╗    ██║     ██║   ██║███████╗   ██║   ██║     █████╗  ██╔██╗ ██║███████╗
+██╔══██║██║███╗██║╚════██║    ██║     ██║   ██║╚════██║   ██║   ██║     ██╔══╝  ██║╚██╗██║╚════██║
+██║  ██║╚███╔███╔╝███████║    ╚██████╗╚██████╔╝███████║   ██║   ███████╗███████╗██║ ╚████║███████║
+╚═╝  ╚═╝ ╚══╝╚══╝ ╚══════╝     ╚═════╝ ╚═════╝ ╚══════╝   ╚═╝   ╚══════╝╚══════╝╚═╝  ╚═══╝╚══════╝
+"""
+
+    compact_logo = r"""
+   AWS COSTLENS
+"""
+
+    if console.size.width >= 105:
+        console.print(f"[bold cyan]{large_logo}[/bold cyan]")
+    else:
+        console.print(f"[bold cyan]{compact_logo}[/bold cyan]", justify="center")
+
+    console.print(
+        "[dim]Lightweight · Read-only AWS FinOps CLI[/dim]",
+        justify="center",
+    )
+    console.print()
+
+
+
 def show_header(account: str, region: str, arn: str) -> None:
     console.print(
         Panel.fit(
@@ -80,45 +115,135 @@ def show_credits(result: dict) -> None:
 
 
 def show_findings(findings: list[Finding]) -> None:
-    table = Table(title="🩺 Findings")
-    table.add_column("Severity")
-    table.add_column("Resource")
-    table.add_column("Finding")
-    table.add_column("Est. Cost/Mo", justify="right")
+    """Display findings grouped by type."""
+
+    if not findings:
+        console.print(
+            Panel(
+                "No findings detected by the enabled checks.",
+                title="🩺 Findings",
+                width=_display_width(),
+                border_style="green",
+            )
+        )
+        return
+
+    grouped = {}
 
     for finding in findings:
-        cost = (
-            f"${finding.estimated_monthly_cost_usd:.2f}"
-            if finding.estimated_monthly_cost_usd is not None
-            else "Review"
-        )
-        table.add_row(
+        key = (
             finding.severity,
             finding.resource_type,
             finding.title,
+        )
+
+        if key not in grouped:
+            grouped[key] = {
+                "count": 0,
+                "cost": 0.0,
+                "has_cost": False,
+            }
+
+        grouped[key]["count"] += 1
+
+        if finding.estimated_monthly_cost_usd is not None:
+            grouped[key]["cost"] += finding.estimated_monthly_cost_usd
+            grouped[key]["has_cost"] = True
+
+    severity_order = {
+        "CRITICAL": 0,
+        "HIGH": 1,
+        "MEDIUM": 2,
+        "LOW": 3,
+        "INFO": 4,
+    }
+
+    ordered = sorted(
+        grouped.items(),
+        key=lambda item: (
+            severity_order.get(item[0][0].upper(), 99),
+            item[0][1],
+            item[0][2],
+        ),
+    )
+
+    table = Table(
+        title="🩺 Findings Summary",
+        width=_display_width(),
+        expand=True,
+    )
+
+    table.add_column("Severity", ratio=1)
+    table.add_column("Resource", ratio=2)
+    table.add_column("Finding", ratio=5)
+    table.add_column("Count", justify="right", ratio=1)
+    table.add_column("Est. Cost/Mo", justify="right", ratio=2)
+
+    for (severity, resource_type, title), data in ordered:
+        if data["has_cost"]:
+            cost = f"${data['cost']:.2f}"
+        else:
+            cost = "Review"
+
+        table.add_row(
+            severity,
+            resource_type,
+            title,
+            str(data["count"]),
             cost,
         )
 
-    if findings:
-        console.print(table)
-    else:
-        console.print(Panel("No findings detected by the enabled checks.", title="🩺 Findings"))
+    console.print(table)
+
+    console.print(
+        f"[dim]Total findings: {len(findings)} · "
+        f"Finding types: {len(grouped)}[/dim]"
+    )
 
 
 def show_recommendations(findings: list[Finding]) -> None:
+    """Display unique recommendations."""
+
     if not findings:
         return
 
-    lines = []
-    for index, finding in enumerate(findings, start=1):
-        lines.append(f"{index}. [{finding.severity}] {finding.recommendation}")
+    recommendations = []
+
+    for finding in findings:
+        recommendation = finding.recommendation.strip()
+
+        if recommendation and recommendation not in recommendations:
+            recommendations.append(recommendation)
+
+    lines = [
+        f"{index}. {recommendation}"
+        for index, recommendation in enumerate(
+            recommendations[:6],
+            start=1,
+        )
+    ]
+
+    if len(recommendations) > 6:
+        lines.append(
+            f"... and {len(recommendations) - 6} more recommendation(s)"
+        )
 
     estimated = sum(
         finding.estimated_monthly_cost_usd or 0.0
         for finding in findings
     )
-    lines.append(f"\nEstimated identified monthly waste: ${estimated:.2f}")
-    console.print(Panel("\n".join(lines), title="💊 Recommendations"))
+
+    lines.append(
+        f"\n[bold]Estimated identified monthly waste:[/bold] "
+        f"${estimated:.2f}"
+    )
+
+    console.print(
+        Panel(
+            "\n".join(lines),
+            title="💊 Recommendations",
+        )
+    )
 
 
 def _money(value: Decimal) -> str:
@@ -137,7 +262,10 @@ def _optional_money(value: object) -> str:
 def show_resource_tags(records: list[dict], errors: list[str] | None = None) -> None:
     """Display tagging status for cost-relevant AWS resources."""
 
-    table = Table(title="🏷️ Resource Tagging")
+    table = Table(
+        title="🏷️ Resource Tagging",
+        width=_display_width(),
+    )
 
     table.add_column("Service")
     table.add_column("Resource")
@@ -209,12 +337,15 @@ def show_resource_tags(records: list[dict], errors: list[str] | None = None) -> 
 def show_resource_tags(records, errors=None):
     """Display EC2, RDS, and S3 resource tagging status."""
 
-    table = Table(title="🏷️ Resource Tagging")
+    table = Table(
+        title="🏷️ Resource Tagging",
+        width=_display_width(),
+    )
 
-    table.add_column("Service", style="cyan")
-    table.add_column("Resource")
-    table.add_column("Status")
-    table.add_column("Tags")
+    table.add_column("Service", style="cyan", ratio=1)
+    table.add_column("Resource", ratio=3)
+    table.add_column("Status", ratio=1)
+    table.add_column("Tags", ratio=5)
 
     tagged = 0
     untagged = 0

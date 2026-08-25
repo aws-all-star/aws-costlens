@@ -17,11 +17,19 @@ from aws_costlens_tool.reports.terminal import (
     show_credits,
     show_findings,
     show_header,
+    show_logo,
     show_recommendations,
     show_resource_tags,
 )
 
 app = typer.Typer(help="Read-only AWS FinOps cost and waste checkup CLI")
+
+@app.callback()
+def main() -> None:
+    """AWS CostLens CLI."""
+    show_logo()
+
+
 
 
 def _session(profile: str | None, region: str):
