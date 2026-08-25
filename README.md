@@ -106,16 +106,13 @@ brew install aws-costlens
   - `s3:GetBucketLocation`
   - `s3:GetBucketTagging`
 
-## Command Line Usage
 
+### 명령줄 옵션
 `aws-costlens`와 그 뒤에 옵션을 사용하여 스크립트를 실행하십시오:
 
 ```bash
 aws-costlens [options]
 ```
-
-### 명령줄 옵션
-
 
 | 옵션 / 명령어 | 설명 |
 |---|---|
@@ -127,8 +124,7 @@ aws-costlens [options]
 | `--show-completion` | 현재 Shell의 자동 완성 스크립트를 출력합니다. |
 | `--help` | 사용 가능한 명령어와 옵션에 대한 도움말을 표시합니다. |
 
-#### 공통 명령 옵션
-
+### 공통 명령 옵션
 각 AWS CostLens 명령에서 다음 옵션을 사용할 수 있습니다.
 
 | 옵션 | 설명 | 기본값 |
@@ -136,3 +132,5 @@ aws-costlens [options]
 | `--profile TEXT` | 인증에 사용할 AWS CLI Profile을 지정합니다. | AWS 기본 인증 정보 |
 | `--region TEXT` | 리소스 및 Waste 점검에 사용할 AWS Region을 지정합니다. | `ap-northeast-2` |
 | `--help` | 선택한 명령어의 도움말을 표시합니다. | — |
+
+<br>
