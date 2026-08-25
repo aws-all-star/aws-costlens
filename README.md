@@ -3,9 +3,7 @@
 # 🔎 AWS CostLens
 
 ### Lightweight, read-only AWS cost & resource visibility CLI
-
-Analyze AWS costs, monitor promotional credits, identify potential waste,  
-and review resource tagging — directly from your terminal.
+AWS 비용을 분석하고, 프로모션 크레딧을 모니터링하며, 잠재적인 낭비 리소스를 식별하고, 리소스 태깅 상태를 터미널에서 직접 확인합니다.
 
 <br>
 
