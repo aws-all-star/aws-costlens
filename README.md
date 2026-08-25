@@ -56,26 +56,26 @@ AWS CostLens는 이런 작은 불편에서 시작했습니다. 여러 AWS Consol
 
 ---
 
-## 시작하기
+## 간단하게 시작하기
 1분 이내에 바로 시작해보기:
 ```bash
-# Trusted formula
+# 신뢰할 수 있는 공식
 brew trust --formula aws-all-star/tap/aws-costlens
 
-# Install
+# 설치하다
 brew tap aws-all-star/tap
 brew install aws-costlens
 
-# Check this month's AWS costs and compare with last month
+# 이번 달 AWS 비용을 확인하고 지난 달과 비교하십시오.
 aws-costlens cost
 
-# Check AWS promotional credit balance and expiration
+# AWS 프로모션 크레딧 잔액 및 만료를 확인하십시오
 aws-costlens credit
 
-# Check unused resources and resource tagging status
+# 미사용 리소스 및 리소스 태깅 상태를 확인하십시오.
 aws-costlens waste
 
-# Run a complete AWS CostLens checkup
+# 전체 AWS CostLens 점검을 실행하십시오.
 aws-costlens check
 ```
 
@@ -87,7 +87,7 @@ brew install aws-costlens
 ```
 <br>
 
-## ⚡ 전제 조건
+## ⚡ 전제 조건 확인
 
 > [!IMPORTANT]
 > 다음과 같은 **읽기 전용 권한**을 가진 AWS 자격 증명이 필요합니다.
