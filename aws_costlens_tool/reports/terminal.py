@@ -14,7 +14,7 @@ console = Console()
 def show_header(account: str, region: str, arn: str) -> None:
     console.print(
         Panel.fit(
-            f"[bold]🏥 AWS FINOPS CHECKUP[/bold]\n"
+            f"[bold]🏥 AWS COSTLENS CHECKUP[/bold]\n"
             f"Account : {account}\n"
             f"Region  : {region}\n"
             f"Identity: {arn}",
