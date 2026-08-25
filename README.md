@@ -88,44 +88,24 @@ brew install aws-costlens
 
 <br>
 
-## ⚡ Prerequisites
+## ⚡ 전제 조건
 
 > [!IMPORTANT]
-> AWS CostLens requires AWS credentials with the following **read-only permissions**.
+> 다음과 같은 **읽기 전용 권한**을 가진 AWS 자격 증명이 필요합니다.
 
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "sts:GetCallerIdentity",
-
-        "ce:GetCostAndUsage",
-        "ce:GetCostForecast",
-        "ce:GetDimensionValues",
-        "ce:GetTags",
-
-        "billing:GetCredits",
-
-        "ec2:DescribeAddresses",
-        "ec2:DescribeInstances",
-        "ec2:DescribeVolumes",
-        "ec2:DescribeSnapshots",
-        "ec2:DescribeRegions",
-        "ec2:DescribeNetworkInterfaces",
-
-        "rds:DescribeDBInstances",
-        "rds:ListTagsForResource",
-
-        "s3:ListAllMyBuckets",
-        "s3:GetBucketLocation",
-        "s3:GetBucketTagging"
-      ],
-      "Resource": "*"
-    }
-  ]
-}
+- **Python 3.8 이상**: 필요한 Python 버전이 설치되어 있는지 확인하십시오.
+- **AWS CLI가 명명된 프로파일**: 원활한 통합을 위해 AWS CLI 프로파일을 설정하십시오
+- **AWS 자격 증명 및 권한**:
+  - `sts:GetCallerIdentity`
+  - `ce:GetCostAndUsage`
+  - `billing:GetCredits`
+  - `ec2:DescribeInstances`
+  - `ec2:DescribeVolumes`
+  - `ec2:DescribeAddresses`
+  - `rds:DescribeDBInstances`
+  - `rds:ListTagsForResource`
+  - `s3:ListAllMyBuckets`
+  - `s3:GetBucketLocation`
+  - `s3:GetBucketTagging`
 
 
