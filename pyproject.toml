@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "aws-costlens-tool"
-version = "0.1.1"
+version = "0.1.6"
 description = "Read-only AWS FinOps CLI for cost, credit, and waste checks"
 readme = "README.md"
 requires-python = ">=3.10"
