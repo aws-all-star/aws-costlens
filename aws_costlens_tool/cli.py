@@ -164,8 +164,11 @@ def waste(
 
 @app.command()
 def update() -> None:
-    """Update AWS CostLens to the latest Homebrew release."""
-    from aws_costlens_tool.update_check import current_version, latest_version
+    """Update AWS CostLens using Homebrew."""
+    from aws_costlens_tool.update_check import (
+        current_version,
+        latest_version,
+    )
     from aws_costlens_tool.updater import run_update
 
     console.print()
@@ -174,30 +177,27 @@ def update() -> None:
     console.print()
 
     current = current_version()
-    latest = latest_version(timeout=5.0)
+    latest = latest_version()
 
     console.print(f"Current version: [bold]v{current}[/bold]")
 
-    if not latest:
-        console.print("[red]Unable to check the latest release.[/red]")
-        raise typer.Exit(code=1)
+    if latest:
+        console.print(f"Latest version:  [bold]v{latest}[/bold]")
 
-    console.print(f"Latest version:  [bold]v{latest}[/bold]")
+        if current == latest:
+            console.print()
+            console.print(
+                "[green]✓ AWS CostLens is already up to date.[/green]"
+            )
+            return
+
     console.print()
-
-    if current == latest:
-        console.print(
-            "[green]✓ AWS CostLens is already up to date.[/green]"
-        )
-        return
-
-    console.print(
-        f"[yellow]Updating v{current} → v{latest}...[/yellow]"
-    )
+    console.print("[yellow]Checking Homebrew for updates...[/yellow]")
     console.print()
 
     try:
         run_update()
+
     except Exception as exc:
         console.print()
         console.print(f"[red]Update failed:[/red] {exc}")
@@ -205,7 +205,7 @@ def update() -> None:
 
     console.print()
     console.print(
-        f"[green]✓ AWS CostLens v{latest} update completed.[/green]"
+        "[green]✓ AWS CostLens update completed.[/green]"
     )
 
 if __name__ == "__main__":

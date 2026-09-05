@@ -1,59 +1,73 @@
 from __future__ import annotations
 
 import json
-import urllib.request
+import shutil
+import subprocess
 from importlib.metadata import PackageNotFoundError, version
 
 PACKAGE_NAME = "aws-costlens-tool"
-LATEST_URL = "https://api.github.com/repos/aws-all-star/aws-costlens/releases/latest"
+FORMULA = "aws-all-star/tap/aws-costlens"
 
 
 def current_version() -> str:
     try:
         return version(PACKAGE_NAME)
     except PackageNotFoundError:
-        return "0.0.0"
+        return "unknown"
+
+
+def latest_version() -> str | None:
+    if shutil.which("brew") is None:
+        return None
+
+    try:
+        # Refresh Homebrew metadata quietly.
+        subprocess.run(
+            ["brew", "update"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            timeout=30,
+            check=False,
+        )
+
+        result = subprocess.run(
+            ["brew", "info", "--json=v2", FORMULA],
+            capture_output=True,
+            text=True,
+            timeout=10,
+            check=True,
+        )
+
+        data = json.loads(result.stdout)
+
+        formulae = data.get("formulae", [])
+
+        if not formulae:
+            return None
+
+        stable = formulae[0].get("versions", {}).get("stable")
+
+        return str(stable) if stable else None
+
+    except Exception:
+        return None
 
 
 def _version_tuple(value: str) -> tuple[int, ...]:
-    value = value.lstrip("v")
-    result = []
-
-    for part in value.split("."):
-        try:
-            result.append(int(part))
-        except ValueError:
-            break
-
-    return tuple(result)
-
-
-def latest_version(timeout: float = 1.5) -> str | None:
     try:
-        request = urllib.request.Request(
-            LATEST_URL,
-            headers={
-                "Accept": "application/vnd.github+json",
-                "User-Agent": "aws-costlens",
-            },
+        return tuple(
+            int(x)
+            for x in value.lstrip("v").split(".")
         )
-
-        with urllib.request.urlopen(request, timeout=timeout) as response:
-            payload = json.load(response)
-
-        latest = str(payload.get("tag_name", "")).lstrip("v")
-        return latest or None
-
-    except Exception:
-        # Update checking must NEVER break normal CLI execution.
-        return None
+    except ValueError:
+        return (0,)
 
 
 def update_available() -> tuple[str, str] | None:
     current = current_version()
     latest = latest_version()
 
-    if not latest:
+    if current == "unknown" or not latest:
         return None
 
     if _version_tuple(latest) > _version_tuple(current):
