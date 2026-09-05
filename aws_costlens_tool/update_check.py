@@ -17,27 +17,35 @@ def current_version() -> str:
 
 def _version_tuple(value: str) -> tuple[int, ...]:
     value = value.lstrip("v")
-    return tuple(
-        int(part)
-        for part in value.split(".")
-        if part.isdigit()
-    )
+    result = []
+
+    for part in value.split("."):
+        try:
+            result.append(int(part))
+        except ValueError:
+            break
+
+    return tuple(result)
 
 
-def latest_version(timeout: float = 1.0) -> str | None:
+def latest_version(timeout: float = 1.5) -> str | None:
     try:
         request = urllib.request.Request(
             LATEST_URL,
-            headers={"User-Agent": "aws-costlens"},
+            headers={
+                "Accept": "application/vnd.github+json",
+                "User-Agent": "aws-costlens",
+            },
         )
 
         with urllib.request.urlopen(request, timeout=timeout) as response:
             payload = json.load(response)
 
-        value = payload.get("tag_name", "").lstrip("v")
-        return value or None
+        latest = str(payload.get("tag_name", "")).lstrip("v")
+        return latest or None
 
     except Exception:
+        # Update checking must NEVER break normal CLI execution.
         return None
 
 

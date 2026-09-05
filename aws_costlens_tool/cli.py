@@ -31,18 +31,24 @@ def main() -> None:
     """AWS CostLens CLI."""
     show_logo()
 
-    update = update_available()
-    if update:
-        current, latest = update
-        console.print(
-            f"[yellow]Update available: v{current} → v{latest}[/yellow]"
-        )
-        console.print(
-            "[dim]Run: brew update && brew upgrade aws-costlens[/dim]"
-        )
-        console.print()
+    try:
+        update = update_available()
 
+        if update:
+            current, latest = update
 
+            console.print(
+                f"[yellow]⬆ New AWS CostLens version available: "
+                f"v{current} → v{latest}[/yellow]"
+            )
+            console.print(
+                "[bold]Run:[/bold] aws-costlens update"
+            )
+            console.print()
+
+    except Exception:
+        # Update checks must never interrupt normal commands.
+        pass
 
 
 def _session(profile: str | None, region: str):
@@ -156,7 +162,51 @@ def waste(
     show_resource_tags(tag_records, tag_errors)
     show_recommendations(findings)
 
+@app.command()
+def update() -> None:
+    """Update AWS CostLens to the latest Homebrew release."""
+    from aws_costlens_tool.update_check import current_version, latest_version
+    from aws_costlens_tool.updater import run_update
 
+    console.print()
+    console.print("[bold cyan]AWS CostLens Update[/bold cyan]")
+    console.print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+    console.print()
+
+    current = current_version()
+    latest = latest_version(timeout=5.0)
+
+    console.print(f"Current version: [bold]v{current}[/bold]")
+
+    if not latest:
+        console.print("[red]Unable to check the latest release.[/red]")
+        raise typer.Exit(code=1)
+
+    console.print(f"Latest version:  [bold]v{latest}[/bold]")
+    console.print()
+
+    if current == latest:
+        console.print(
+            "[green]✓ AWS CostLens is already up to date.[/green]"
+        )
+        return
+
+    console.print(
+        f"[yellow]Updating v{current} → v{latest}...[/yellow]"
+    )
+    console.print()
+
+    try:
+        run_update()
+    except Exception as exc:
+        console.print()
+        console.print(f"[red]Update failed:[/red] {exc}")
+        raise typer.Exit(code=1) from exc
+
+    console.print()
+    console.print(
+        f"[green]✓ AWS CostLens v{latest} update completed.[/green]"
+    )
 
 if __name__ == "__main__":
     app()
