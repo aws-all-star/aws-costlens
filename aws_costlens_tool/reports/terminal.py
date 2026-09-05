@@ -67,14 +67,6 @@ def show_cost_summary(summary: dict) -> None:
     table.add_row("Change", "N/A" if change is None else f"{change:+.1f}%")
     console.print(table)
 
-    services = Table(title="Top Service Cost Drivers")
-    services.add_column("Service")
-    services.add_column("Cost", justify="right")
-    for item in summary.get("services", []):
-        services.add_row(item["service"], _money(item["cost"]))
-    console.print(services)
-
-
 def show_credits(result: dict) -> None:
     if not result.get("available"):
         console.print(

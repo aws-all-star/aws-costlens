@@ -6,6 +6,34 @@ from rich.console import Console
 
 console = Console()
 
+SERVICE_NAMES = {
+    "Amazon Elastic Compute Cloud - Compute": "EC2 Compute",
+    "AmazonCloudWatch": "CloudWatch",
+    "EC2 - Other": "EC2 - Other",
+    "Amazon Elastic Container Service for Kubernetes": "EKS",
+    "Amazon Virtual Private Cloud": "VPC",
+    "Amazon Elastic Load Balancing": "ELB",
+    "AWSDevOpsAgent": "DevOps Agent",
+    "CloudWatch Events": "EventBridge",
+    "Amazon Relational Database Service": "RDS",
+    "Amazon Simple Storage Service": "S3",
+    "AWS Lambda": "Lambda",
+    "Amazon Route 53": "Route 53",
+    "Amazon DynamoDB": "DynamoDB",
+    "Amazon Elastic Container Service": "ECS",
+    "Amazon Elastic Container Registry (ECR)": "ECR",
+    "Amazon OpenSearch Service": "OpenSearch",
+    "Amazon Simple Notification Service": "SNS",
+    "Amazon Simple Queue Service": "SQS",
+    "AWS Key Management Service": "KMS",
+    "AWS CloudTrail": "CloudTrail",
+    "AWS Config": "Config",
+}
+
+
+def _service_name(name: str) -> str:
+    return SERVICE_NAMES.get(name, name)
+
 
 def _bar(value: float, maximum: float, width: int = 22) -> str:
     if maximum <= 0 or value <= 0:
@@ -38,7 +66,7 @@ def show_terminal_cost_charts(
 
             rows.append(
                 {
-                    "service": str(item.get("service", "Unknown")),
+                    "service": _service_name(str(item.get("service", "Unknown"))),
                     "cost": cost,
                 }
             )
