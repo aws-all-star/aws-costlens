@@ -4,13 +4,15 @@ import typer
 from botocore.exceptions import BotoCoreError, ClientError, ProfileNotFound
 
 from aws_costlens_tool.aws.billing import get_credits
-from aws_costlens_tool.aws.cost_explorer import get_cost_summary
+from aws_costlens_tool.aws.cost_explorer import get_cost_summary, get_daily_costs
 from aws_costlens_tool.aws.session import get_identity, get_session
 from aws_costlens_tool.checks.ebs import check_unattached_ebs
 from aws_costlens_tool.checks.eip import check_unassociated_eips
 from aws_costlens_tool.checks.stopped_ec2 import check_stopped_instances
 from aws_costlens_tool.checks.tags import scan_resource_tags
 from aws_costlens_tool.config import DEFAULT_REGION
+from aws_costlens_tool.update_check import update_available
+from aws_costlens_tool.visualization.charts import show_terminal_cost_charts
 from aws_costlens_tool.reports.terminal import (
     console,
     show_cost_summary,
@@ -28,6 +30,17 @@ app = typer.Typer(help="Read-only AWS FinOps cost and waste checkup CLI")
 def main() -> None:
     """AWS CostLens CLI."""
     show_logo()
+
+    update = update_available()
+    if update:
+        current, latest = update
+        console.print(
+            f"[yellow]Update available: v{current} → v{latest}[/yellow]"
+        )
+        console.print(
+            "[dim]Run: brew update && brew upgrade aws-costlens[/dim]"
+        )
+        console.print()
 
 
 
@@ -85,12 +98,24 @@ def check(
 def cost(
     profile: str | None = typer.Option(None, help="AWS CLI profile name"),
     region: str = typer.Option(DEFAULT_REGION, help="AWS workload region"),
+    days: int = typer.Option(7, min=1, max=90, help="Daily cost trend period"),
 ) -> None:
-    """Show AWS cost summary."""
+    """Show AWS cost summary and terminal visualization."""
     session = _session(profile, region)
     identity = get_identity(session)
+
     show_header(identity["account"], region, identity["arn"])
-    show_cost_summary(get_cost_summary(session))
+
+    try:
+        summary = get_cost_summary(session)
+        daily = get_daily_costs(session, days=days)
+
+        show_cost_summary(summary)
+        show_terminal_cost_charts(summary, daily, daily_limit=days)
+
+    except (ClientError, BotoCoreError) as exc:
+        console.print(f"[red]AWS API error:[/red] {exc}")
+        raise typer.Exit(code=1) from exc
 
 
 @app.command()
@@ -130,6 +155,7 @@ def waste(
     show_findings(findings)
     show_resource_tags(tag_records, tag_errors)
     show_recommendations(findings)
+
 
 
 if __name__ == "__main__":

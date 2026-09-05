@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import date, timedelta
+from datetime import date, timedelta, timedelta
 from decimal import Decimal
 
 import boto3
@@ -71,3 +71,31 @@ def get_cost_summary(session: boto3.Session, top_n: int = 8) -> dict:
         "services": services[:top_n],
         "currency": "USD",
     }
+
+
+def get_daily_costs(session: boto3.Session, days: int = 30) -> list[dict]:
+    today = date.today()
+    start = today - timedelta(days=days)
+
+    ce = session.client("ce", region_name="us-east-1")
+
+    response = ce.get_cost_and_usage(
+        TimePeriod={
+            "Start": start.isoformat(),
+            "End": today.isoformat(),
+        },
+        Granularity="DAILY",
+        Metrics=["UnblendedCost"],
+    )
+
+    return [
+        {
+            "date": item["TimePeriod"]["Start"],
+            "cost": Decimal(
+                item.get("Total", {})
+                .get("UnblendedCost", {})
+                .get("Amount", "0")
+            ),
+        }
+        for item in response.get("ResultsByTime", [])
+    ]
